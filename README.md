@@ -8,8 +8,7 @@
     username = (f"{arguments[3]}") # Reddit username
     password = (f"{arguments[4]}") # Reddit password
 
-# StockBot parses a text file with indexes and check for each(from the CNN money website), whether it has risen above a certain percentage since the previous close.
-# If so, it extracts information abut the stock from the Finnhub API and posts relevant data to a Discord server.
+# StockBot parses a text file with indexes and check for each(from the CNN money website), whether it has risen above a certain percentage since the previous close. If so, it extracts information abut the stock from the Finnhub API and posts relevant data to a Discord server.
 # Needs the below input
 
     discord_bot_token = (f"{arguments[0]}") # Discord bot token
