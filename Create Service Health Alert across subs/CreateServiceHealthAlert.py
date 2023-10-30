@@ -2,6 +2,7 @@ import requests
 import os
 import sys
 
+# Create subscriptions list from input parameters
 arguments = sys.argv[1:]
 subscriptions = []
 
@@ -12,11 +13,13 @@ else:
     for sub in arguments:
         subscriptions.append(sub)
 
+# Get envoronmental variables for authentication; add action group resource id
 client_id = os.getenv('CLIENT_ID')
 secret_value = os.getenv('CLIENT_SECRET')
 tenant_id = os.getenv('TENANT_ID')
-action_group = "<ADD ACTION GROUP RESOURCE ID>"
+action_group = "<ACTION GROUP RESOURCE ID HERE>"
 
+# Get authentication token from Azure
 auth_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
 auth_data = {
             'grant_type': 'client_credentials',
@@ -32,6 +35,7 @@ headers = {
             'Authorization': f'Bearer {access_token}'
 }
 
+# Loop Subscriptions to check if a Service Health alert was created.
 for subscription in subscriptions:
     subscription_get_api_url = f"https://management.azure.com/subscriptions/{subscription}?api-version=2022-12-01"
     sub_get_response = requests.get(subscription_get_api_url, headers=headers)
