@@ -23,14 +23,13 @@ subscriptions_list = os.getenv('SUBSCRIPTIONS')
 arguments = sys.argv[1:]
 action = "" # Action should be either start or deallocate
 
-print(arguments[0])
 if len(arguments) == 0:
     print("Action preference incorrectly set. Please set action preference(arg 1) to either 'start' or 'deallocate').")
     sys.exit()
 elif arguments[0] == 'deallocate' or arguments[0] == 'start':
     action = arguments[0]
 else:
-    print("Action preference incorrectly set. Please set action preference(arg 1) to either 'start' or 'deallocate!').")
+    print("Action preference incorrectly set. Please set action preference(arg 1) to either 'start' or 'deallocate').")
     sys.exit()
 
 # Get access token and define the authentication header for requests. Scope might need to be changed depending on the actions
