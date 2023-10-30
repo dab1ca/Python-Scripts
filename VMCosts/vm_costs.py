@@ -41,37 +41,43 @@ post_body = {
    	"query": f"let metrictimespan = ago({query_period}d); Heartbeat \
                 | where TimeGenerated > metrictimespan \
                 | summarize hbcount = count(), lastHeartBeat = max(TimeGenerated) by Computer, OSType \
-                | join kind=leftouter (InsightsMetrics \
-                | where TimeGenerated > metrictimespan and Name == 'UtilizationPercentage' \
-                | summarize AvgCPUUsageInsights = avg(Val), MaxCPUUsageInsights = max(Val) by Computer) on Computer, $left.Computer == $right.Computer \
-                | join kind=leftouter (InsightsMetrics \
-                | where TimeGenerated > metrictimespan and Name == 'FreeSpacePercentage' \
-                | extend Disk=tostring(todynamic(Tags)['vm.azm.ms/mountId']) \
-                | where Disk == 'C:' or Disk == '/' \
-                | summarize FreeDiskSpaceInsights = avg(Val) by Computer) on Computer, $left.Computer == $right.Computer \
-                | join kind=leftouter (InsightsMetrics \
-                | where TimeGenerated > metrictimespan and Name == 'AvailableMB' \
-                | summarize AvgAvailableRAMinGBInsights = avg(Val)/1000, MinAvailableRAMinMBInsights = min(Val) by Computer) on Computer, $left.Computer == $right.Computer \
-                | join kind=leftouter (Perf \
-                | where TimeGenerated > metrictimespan and CounterName == '% Processor Time' \
-                | summarize AvgCPUUsagePerf = avg(CounterValue), MaxCPUUsagePerf = max(CounterValue) by Computer) on Computer, $left.Computer == $right.Computer \
-                | join kind=leftouter (Perf \
-                | where TimeGenerated > metrictimespan \
-                | where CounterName == 'Available MBytes Memory' or CounterName == 'Available MBytes' or CounterName == 'Available Bytes' \
-                | extend AvailableMbytes = case(CounterName == 'Available Bytes', CounterValue/1048576, CounterValue) \
-                | summarize AvgMemoryUsageGBPerf = avg(AvailableMbytes)/1000, MinMemoryUsageMBPerf = min(AvailableMbytes) by Computer) on Computer, $left.Computer == $right.Computer \
-                | join kind=leftouter (Perf \
-                | where TimeGenerated > metrictimespan and CounterName == '% Free Space' \
-                | where InstanceName == 'C:' or InstanceName == '/' \
-                | summarize FreeDiskSpacePerf = avg(CounterValue) by Computer) on Computer, $left.Computer == $right.Computer \
+                    | join kind=leftouter (InsightsMetrics \
+                    | where TimeGenerated > metrictimespan and Name == 'UtilizationPercentage' \
+                    | summarize AvgCPUUsageInsights = avg(Val), MaxCPUUsageInsights = max(Val) by Computer) \
+                on Computer, $left.Computer == $right.Computer \
+                    | join kind=leftouter (InsightsMetrics \
+                    | where TimeGenerated > metrictimespan and Name == 'FreeSpacePercentage' \
+                    | extend Disk=tostring(todynamic(Tags)['vm.azm.ms/mountId']) \
+                    | where Disk == 'C:' or Disk == '/' \
+                    | summarize FreeDiskSpaceInsights = avg(Val) by Computer) \
+                on Computer, $left.Computer == $right.Computer \
+                    | join kind=leftouter (InsightsMetrics \
+                    | where TimeGenerated > metrictimespan and Name == 'AvailableMB' \
+                    | summarize AvgAvailableRAMinGBInsights = avg(Val)/1000, MinAvailableRAMinMBInsights = min(Val) by Computer) \
+                on Computer, $left.Computer == $right.Computer \
+                    | join kind=leftouter (Perf \
+                    | where TimeGenerated > metrictimespan and CounterName == '% Processor Time' \
+                    | summarize AvgCPUUsagePerf = avg(CounterValue), MaxCPUUsagePerf = max(CounterValue) by Computer) \
+                on Computer, $left.Computer == $right.Computer \
+                    | join kind=leftouter (Perf \
+                    | where TimeGenerated > metrictimespan \
+                    | where CounterName == 'Available MBytes Memory' or CounterName == 'Available MBytes' or CounterName == 'Available Bytes' \
+                    | extend AvailableMbytes = case(CounterName == 'Available Bytes', CounterValue/1048576, CounterValue) \
+                    | summarize AvgMemoryUsageGBPerf = avg(AvailableMbytes)/1000, MinMemoryUsageMBPerf = min(AvailableMbytes) by Computer) \
+                on Computer, $left.Computer == $right.Computer \
+                    | join kind=leftouter (Perf \
+                    | where TimeGenerated > metrictimespan and CounterName == '% Free Space' \
+                    | where InstanceName == 'C:' or InstanceName == '/' \
+                    | summarize FreeDiskSpacePerf = avg(CounterValue) by Computer) \
+                on Computer, $left.Computer == $right.Computer \
                 | extend reportingMethod = case(isnull(AvgCPUUsageInsights), 'Perf', 'Insights') \
                 | project Computer, OSType, hbcount, lastHeartBeat, \
-                AvgCPUUsage = case(reportingMethod == 'Insights', AvgCPUUsageInsights, AvgCPUUsagePerf), \
-                MaxCPUUsage = case(reportingMethod == 'Insights', MaxCPUUsageInsights, MaxCPUUsagePerf), \
-                FreeDiskSpace = case(reportingMethod == 'Insights', FreeDiskSpaceInsights, FreeDiskSpacePerf), \
-                AvgAvailableRAMinGB = case(reportingMethod == 'Insights', AvgAvailableRAMinGBInsights, AvgMemoryUsageGBPerf), \
-                MinAvailableRAMinMB = case(reportingMethod == 'Insights', MinAvailableRAMinMBInsights, MinMemoryUsageMBPerf), \
-                reportingMethod" 
+                    AvgCPUUsage = case(reportingMethod == 'Insights', AvgCPUUsageInsights, AvgCPUUsagePerf), \
+                    MaxCPUUsage = case(reportingMethod == 'Insights', MaxCPUUsageInsights, MaxCPUUsagePerf), \
+                    FreeDiskSpace = case(reportingMethod == 'Insights', FreeDiskSpaceInsights, FreeDiskSpacePerf), \
+                    AvgAvailableRAMinGB = case(reportingMethod == 'Insights', AvgAvailableRAMinGBInsights, AvgMemoryUsageGBPerf), \
+                    MinAvailableRAMinMB = case(reportingMethod == 'Insights', MinAvailableRAMinMBInsights, MinMemoryUsageMBPerf), \
+                    reportingMethod" 
 }
 
 general_query_response = requests.post(log_analytics_query_url, json=post_body, headers=headers)
@@ -165,3 +171,4 @@ for i in range(len(general_query_json['tables'][0]['rows'])):
     
 # Print final table
 print(tabulate(table_data_query, headers='firstrow', tablefmt='psql', floatfmt=".2f", maxcolwidths=[None, None, 14, None, None, None, 20]))
+
