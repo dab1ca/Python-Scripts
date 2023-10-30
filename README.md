@@ -34,7 +34,6 @@
     $Env:SUBSCRIPTIONS = <'LIST OF SUBSCRIPTIONS TO LOOP, SEPARATED BY ',''>
 
 Output:
-![image](https://github.com/dab1ca/Python-Scripts/assets/45315505/29d70b10-1d1c-4671-abf4-8ff7b5bad72c)
 
 ## Create Service Health Alerts
 ### Loops a list of Azure Subscriptions and checks if there is a Service Health alert created in it. If not, it creates an alert.
