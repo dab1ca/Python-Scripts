@@ -33,7 +33,63 @@
     $Env:TENANT_ID = <'AZURE TENANT ID'>
     $Env:SUBSCRIPTIONS = <'LIST OF SUBSCRIPTIONS TO LOOP, SEPARATED BY ',''>
 
-Output:
+### Output:
+
+
+![image](https://github.com/dab1ca/Python-Scripts/assets/45315505/59d31a59-4139-4970-9193-bb8da1654237)
 
 ## Create Service Health Alerts
-### Loops a list of Azure Subscriptions and checks if there is a Service Health alert created in it. If not, it creates an alert.
+### Loops a list of Azure Subscriptions and checks if there is a Service Health alert created in it. If not, creates an alert.
+### Accepts Subscriptions as input parameters
+    CreateServiceHealthAlertInput.py <SUBID_1> <SUBID_2> <SUBID_3>
+
+### Needs environment variables set
+    export CLIENT_ID=<SP CLIENT ID>
+    export CLIENT_SECRET=<SP CLIENT SECRET VALUE>
+    export TENANT_ID=<AZURE TENANT ID>
+
+    $Env:CLIENT_ID = <'SP CLIENT ID'>
+    $Env:CLIENT_SECRET = <'SP CLIENT SECRET VALUE'>
+    $Env:TENANT_ID = <'AZURE TENANT ID'>
+
+### Output: 
+
+![image](https://github.com/dab1ca/Python-Scripts/assets/45315505/b18d4ae3-41bb-4ed1-a537-ff5ab935c148)
+
+## VM Costs
+### Gets a list of all VMs in a target Azure Subscription, calculates uptime in the last 30 days and estimated cost for Consumption plan, based on the VM Size. Stores vm data in a log file and prints the estimated costs for Windows/Linux/Total per Resource Group.
+
+### Needs environment variables set
+    export CLIENT_ID=<SP CLIENT ID>
+    export CLIENT_SECRET=<SP CLIENT SECRET VALUE>
+    export TENANT_ID=<AZURE TENANT ID>
+    export SUBSCRIPTIONS=<LIST OF SUBSCRIPTIONS TO LOOP, SEPARATED BY ','>
+
+    $Env:CLIENT_ID = <'SP CLIENT ID'>
+    $Env:CLIENT_SECRET = <'SP CLIENT SECRET VALUE'>
+    $Env:TENANT_ID = <'AZURE TENANT ID'>
+    $Env:SUBSCRIPTIONS = <'LIST OF SUBSCRIPTIONS TO LOOP, SEPARATED BY ',''>
+
+### Output:
+
+![image](https://github.com/dab1ca/Python-Scripts/assets/45315505/852041a5-fc5e-4aa0-bf57-de6ff5885758)
+![image](https://github.com/dab1ca/Python-Scripts/assets/45315505/e2133911-6a00-4ae8-92d5-a9ce8dce757e)
+
+## VM Insights
+### Gets a list of all VMs reporting to a target workspace and calculates: Available Time/Last Available/ Avg CPU (%)/Max CPU (%)/CPU Bottlenecks/Free Disk Space (%)/Avg RAM (GB)/Min RAM (MB)/Method of reporting
+### Accepts days for report as input parameters or defaults to 7 if no input is added
+
+### Needs environment variables set
+    export CLIENT_ID=<SP CLIENT ID>
+    export CLIENT_SECRET=<SP CLIENT SECRET VALUE>
+    export TENANT_ID=<AZURE TENANT ID>
+    export WORKSPACE_ID=<WORKSPACE ID OF THE LOG ANALYTICS WORKSPACE>
+
+    $Env:CLIENT_ID = <'SP CLIENT ID'>
+    $Env:CLIENT_SECRET = <'SP CLIENT SECRET VALUE'>
+    $Env:TENANT_ID = <'AZURE TENANT ID'>
+    $Env:WORKSPACE_ID = <'WORKSPACE ID OF THE LOG ANALYTICS WORKSPACE'>
+
+### Output:
+
+![image](https://github.com/dab1ca/Python-Scripts/assets/45315505/277808df-cd8e-4a79-a462-f909013acae3)
